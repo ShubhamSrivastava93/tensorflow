@@ -51,6 +51,15 @@ final class NativeInterpreterWrapper implements AutoCloseable {
     this(mappedByteBuffer, /* numThreads= */ -1);
   }
 
+  //custom constructor
+ NativeInterpreterWrapper(byte[] model_data) {
+    errorHandle = createErrorReporter(ERROR_BUFFER_SIZE);
+    modelHandle = createModelFromByteArray(model_data, errorHandle);
+    interpreterHandle = createInterpreter(modelHandle, errorHandle,-1);
+    isMemoryAllocated = true;
+    
+  }
+
   /**
    * Initializes a {@code NativeInterpreterWrapper} with a {@code MappedByteBuffer} and specifies
    * the number of inference threads. The MappedByteBuffer should not be modified after the
@@ -328,6 +337,8 @@ final class NativeInterpreterWrapper implements AutoCloseable {
   private static native long createModelWithBuffer(MappedByteBuffer modelBuffer, long errorHandle);
 
   private static native long createInterpreter(long modelHandle, long errorHandle, int numThreads);
+
+  private static native long createModelFromByteArray(byte[] model_data,long errorHandle);
 
   private static native void delete(long errorHandle, long modelHandle, long interpreterHandle);
 

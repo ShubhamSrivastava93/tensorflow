@@ -135,6 +135,35 @@ std::unique_ptr<FlatBufferModel> FlatBufferModel::BuildFromModel(
   return model;
 }
 
+//custom methods start
+
+std::unique_ptr<FlatBufferModel> FlatBufferModel::BuildFromByteArray(
+    const signed char* data, size_t buffer_size, ErrorReporter* error_reporter) {
+   error_reporter = ValidateErrorReporter(error_reporter);
+  
+  std::unique_ptr<FlatBufferModel> model;
+   Allocation* allocation =
+      new MemoryAllocation(data, buffer_size, error_reporter);
+
+  model.reset(new FlatBufferModel(allocation, error_reporter));
+  if (!model->initialized()) model.reset();
+  return model;
+}
+
+// FlatBufferModel::FlatBufferModel(const signed char* ptr,size_t num_bytes,ErrorReporter* error_reporter) 
+//  : error_reporter_(error_reporter ? error_reporter
+//                                      : DefaultErrorReporter()){
+
+//  allocation_ = new MemoryAllocation(ptr, num_bytes, error_reporter);
+//   if (!allocation_->valid()) return;
+//  model_ = ::tflite::GetModel(allocation_->base());
+ 
+// }
+
+//custom method ends
+
+
+
 bool FlatBufferModel::CheckModelIdentifier() const {
   if (!tflite::ModelBufferHasIdentifier(allocation_->base())) {
     const char* ident = flatbuffers::GetBufferIdentifier(allocation_->base());

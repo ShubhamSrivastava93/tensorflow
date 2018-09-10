@@ -82,6 +82,15 @@ class FlatBufferModel {
       const char* buffer, size_t buffer_size,
       ErrorReporter* error_reporter = DefaultErrorReporter());
 
+    //custom method starts
+   static std::unique_ptr<FlatBufferModel> BuildFromByteArray(
+      const signed char* buffer, size_t buffer_size,
+      ErrorReporter* error_reporter = DefaultErrorReporter());
+   //custom method ends
+
+
+
+
   // Builds a model directly from a flatbuffer pointer. The caller retains
   // ownership of the buffer and should keep it alive until the returned object
   // is destroyed. Caller retains ownership of `error_reporter` and must ensure

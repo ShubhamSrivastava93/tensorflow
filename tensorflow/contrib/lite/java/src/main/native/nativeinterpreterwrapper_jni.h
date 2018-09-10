@@ -78,6 +78,10 @@ JNIEXPORT jlong JNICALL
 Java_org_tensorflow_lite_NativeInterpreterWrapper_createErrorReporter(
     JNIEnv* env, jclass clazz, jint size);
 
+
+
+
+
 /*
  *  Class:     org_tensorflow_lite_NativeInterpreterWrapper
  *  Method:
@@ -95,6 +99,14 @@ Java_org_tensorflow_lite_NativeInterpreterWrapper_createModel(
 JNIEXPORT jlong JNICALL
 Java_org_tensorflow_lite_NativeInterpreterWrapper_createModelWithBuffer(
     JNIEnv* env, jclass clazz, jobject model_buffer, jlong error_handle);
+
+
+//custom method
+JNIEXPORT jlong JNICALL
+Java_org_tensorflow_lite_NativeInterpreterWrapper_createModelFromByteArray(
+    JNIEnv* env, jclass clazz, jbyteArray model_data, jlong error_handle);
+//end custom method
+
 
 /*
  *  Class:     org_tensorflow_lite_NativeInterpreterWrapper

@@ -360,6 +360,52 @@ Java_org_tensorflow_lite_NativeInterpreterWrapper_createModel(
   env->ReleaseStringUTFChars(model_file, path);
   return reinterpret_cast<jlong>(model.release());
 }
+//custom method start
+JNIEXPORT jlong JNICALL
+Java_org_tensorflow_lite_NativeInterpreterWrapper_createModelFromByteArray(
+    JNIEnv* env, jclass /*clazz*/, jbyteArray model_data,jlong error_handle) {
+    BufferErrorReporter* error_reporter =
+    convertLongToErrorReporter(env, error_handle);
+  if (error_reporter == nullptr) return 0;
+  //const char* path = env->GetStringUTFChars(model_data, nullptr);
+  
+  jbyte* modelData = env->GetByteArrayElements(model_data, NULL);
+    // char *data= (char *)modelData;
+  int size = env->GetArrayLength(model_data);
+           // size=size+10;
+if (!VerifyModel(modelData, size)) {
+    throwException(env, kIllegalArgumentException,
+                   "ByteArray is not a valid flatbuffer model");
+   env-> ReleaseByteArrayElements(model_data, modelData,0);
+    return 0;
+  }
+           
+                  
+  // {
+  //  // tflite::FileCopyAllocation allocation(path, nullptr);
+  //   if (!VerifyModel(allocation.base(), allocation.bytes())) {
+  //     throwException(env, kIllegalArgumentException,
+  //                    "Contents of %s is not a valid flatbuffer model", path);
+  //     env->ReleaseStringUTFChars(model_data, path);
+  //     return 0;
+  //   }
+  // }
+
+  auto model = tflite::FlatBufferModel::BuildFromByteArray(modelData,static_cast<size_t>(size) ,error_reporter);
+  if (!model) {
+    throwException(env, kIllegalArgumentException,
+                   "Contents of %s does not encode a valid TensorFlowLite "
+                   "model: %s",
+                   modelData, error_reporter->CachedErrorMessage());
+   // env->ReleaseStringUTFChars(model_data, modelData);
+   env->ReleaseByteArrayElements(model_data, modelData,0);
+    return 0;
+  }
+ env->ReleaseByteArrayElements(model_data, modelData,0);
+  return reinterpret_cast<jlong>(model.release());
+}
+
+//custom method ends
 
 JNIEXPORT jlong JNICALL
 Java_org_tensorflow_lite_NativeInterpreterWrapper_createModelWithBuffer(

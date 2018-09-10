@@ -67,6 +67,12 @@ public final class Interpreter implements AutoCloseable {
     wrapper = new NativeInterpreterWrapper(modelFile.getAbsolutePath());
   }
 
+//custom method
+    public Interpreter(@NonNull byte[] modelData){
+
+   wrapper = new NativeInterpreterWrapper(modelData);
+
+  }
   /**
    * Initializes a {@code Interpreter} and specifies the number of threads used for inference.
    *
