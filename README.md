@@ -93,6 +93,3 @@ The TensorFlow project strives to abide by generally accepted best practices in 
 
 Learn more about the TensorFlow community at the [community page of tensorflow.org](https://www.tensorflow.org/community) for a few ways to participate.
 
-## License
-
-[Apache License 2.0](LICENSE)
